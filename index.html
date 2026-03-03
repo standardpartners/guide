@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Standard Partners Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+    <style>
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: #F9FAFB;
+            color: #191F28;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .animate-fade {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .nav-item.active { color: #0050FF; }
+        .nav-item { color: #ADB5BD; transition: all 0.2s; }
+        .step-label {
+            background-color: #0050FF;
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 2px 10px;
+            border-radius: 99px;
+            text-transform: uppercase;
+        }
+        .audio-player::-webkit-media-controls-panel { background-color: #F2F4F6; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        img { max-width: 100%; height: auto; border-radius: 24px; display: block; }
+        button:active { transform: scale(0.97); }
+    </style>
+</head>
+<body class="overflow-x-hidden no-scrollbar">
+
+    <!-- FIXED TOP HEADER -->
+    <header class="fixed top-0 left-0 right-0 h-14 glass border-b border-gray-100 z-[100] flex items-center justify-between px-5">
+        <div class="flex items-center">
+            <img src="https://iili.io/qKNSOUx.png" alt="Logo" class="h-10 w-auto object-contain rounded-none">
+        </div>
+        <div class="flex bg-[#F2F4F6] p-0.5 rounded-full text-[12px] font-bold">
+            <button id="lang-ko" onclick="switchLang('ko')" class="px-3 py-1 rounded-full transition-all text-[#6B7684]">한국어</button>
+            <button id="lang-ru" onclick="switchLang('ru')" class="px-3 py-1 rounded-full transition-all bg-white shadow-sm text-[#0050FF]">русский</button>
+        </div>
+    </header>
+
+    <main id="app-content" class="pt-20 pb-32 px-5 max-w-md mx-auto min-h-screen">
+        <!-- Content Renders Here -->
+    </main>
+
+    <!-- FIXED BOTTOM NAVIGATION -->
+    <nav class="fixed bottom-0 left-0 right-0 glass border-t border-gray-100 z-[100] safe-bottom">
+        <div class="flex items-center justify-around h-16 px-1">
+            <button onclick="changeTab('home')" class="nav-item active flex flex-col items-center justify-center flex-1" id="nav-home">
+                <i data-lucide="home" class="w-5 h-5"></i>
+                <span class="text-[9px] mt-1 font-bold nav-text">홈</span>
+            </button>
+            <button onclick="changeTab('ars')" class="nav-item flex flex-col items-center justify-center flex-1" id="nav-ars">
+                <i data-lucide="phone" class="w-5 h-5"></i>
+                <span class="text-[9px] mt-1 font-bold nav-text">ARS</span>
+            </button>
+            <button onclick="changeTab('data')" class="nav-item flex flex-col items-center justify-center flex-1" id="nav-data">
+                <i data-lucide="database" class="w-5 h-5"></i>
+                <span class="text-[9px] mt-1 font-bold nav-text">데이터</span>
+            </button>
+            <button onclick="changeTab('signup')" class="nav-item flex flex-col items-center justify-center flex-1" id="nav-signup">
+                <i data-lucide="user-plus" class="w-5 h-5"></i>
+                <span class="text-[9px] mt-1 font-bold nav-text">PASS가입</span>
+            </button>
+            <button onclick="changeTab('cert')" class="nav-item flex flex-col items-center justify-center flex-1" id="nav-cert">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+                <span class="text-[9px] mt-1 font-bold nav-text">인증서</span>
+            </button>
+            <button onclick="changeTab('sign')" class="nav-item flex flex-col items-center justify-center flex-1" id="nav-sign">
+                <i data-lucide="edit-3" class="w-5 h-5"></i>
+                <span class="text-[9px] mt-1 font-bold nav-text">전자서명</span>
+            </button>
+        </div>
+    </nav>
+
+    <script>
+        let currentLang = 'ru';
+        let currentTab = 'home';
+
+        const i18n = {
+            ko: {
+                nav: ["홈", "ARS", "데이터", "PASS가입", "인증서", "전자서명"],
+                home: { title: "Standard Partners 가이드", items: ["1. ARS 개인정보활용동의 방법", "2. 공공마이데이터조회 동의 방법", "3. PASS 회원가입 방법", "4. PASS 인증서 등록 방법", "5. 전자서명 하는 방법"] },
+                footer: { 
+                    company: "(주)스탠다드파트너스(Srandard Partners Co., Ltd)", 
+                    brn: "등록번호 : 840-88-02840", 
+                    ceo: "대표자 : 김민정", 
+                    addr: "소재지 : 인천 남동구 남동서로236번길 30, 2층", 
+                    email: "email : srandardpartnerskor@gmail.com", 
+                    rights: "© (주)스탠다드파트너스(Srandard Partners Co., Ltd). All rights reserved. 무단 사용 및 배포 금지." 
+                },
+                ars: { q: "ARS 개인정보활용동의란 무엇인가?", a: "금융기관이 개인신용정보를 수집,이용,제공하는 것에 대해 전화자동응답시스템(ARS)으로 본인이 동의하는 절차입니다.", notice: "'1522-2299'로 오는 전화를 꼭 받아주세요. (신분증 준비 필수)", summary: "요약", ex: "예",
+                    summarySteps: ["첫번째 음성 맨트 후 - 한국신분증의 등록번호와 '#'버튼 누르기", "두번째 음성 맨트 후 - 이용중인 휴대폰의 통신사를 번호를 눌러 선택하기", "세번째 음성맨트 후 - 이용중인 휴대폰번호와 '#'버튼 누르기", "네번째 음성맨트 후 - '1'번 누르기", "다섯번째 음성맨트 후 - 수신된 SMS문자의 6자리 숫자코드 누르기", "여섯번째 음성맨트 후 - 통화종료"]
+                },
+                data: { q: "공공마이데이터조회 동의란 무엇인가?", a: "공공마이데이터 조회 동의는 정부·공공기관이 보유한 나의 행정정보(소득, 재산, 자격, 세금 등)를 해당 금융기관이 직접 확인하도록 허용하는 것입니다. 이 동의를 하면 서류를 따로 직접 제출하지 않아도 되고, 필요한 정보만 목적에 맞게 안전하게 조회됩니다." },
+                signup: { q: "PASS란 무엇인가?", a: "PASS 인증서는 휴대폰 번호만으로 본인임을 증명(인증)할 수 있는 전자신분증입니다.", down: "현재 사용 중인 휴대폰(OS·통신사)에 맞는 다운로드 버튼을 눌러 다운로드해주세요.", search: "다운이 안될시, 스토어에서 \"PASS\"를 검색해서 다운로드 해주세요." },
+                cert: { q: "PASS란 무엇인가?", a: "PASS 인증서는 휴대폰 번호만으로 본인임을 증명(인증)할 수 있는 전자신분증입니다." },
+                sign: { btn: "아래 버튼을 누르면 전자서명으로 이동합니다", q: "전자서명이란 무엇인가?", a: "온라인 전자서명은 대출 서류에 ‘직접 사인하러 가지 않고’, 휴대폰으로 본인 확인 후 전자인증을 통해 서명하는 제도입니다. 종이에 서명하는 것과 동일한 법적효력이 있습니다." },
+                common: { step: "Step", afterVoice: "음성맨트 후", done: "완료되었습니다." }
+            },
+            ru: {
+                nav: ["Главная", "ARS", "Данные", "Рег. PASS", "Серт. PASS", "Подпись"],
+                home: { title: "Гид Standard Partners", items: ["1. Согласие через ARS", "2. Согласие на MyData", "3. Регистрация в PASS", "4. Сертификат PASS", "5. Электронная подпись"] },
+                footer: { 
+                    company: "(주)스탠다드파트너스(Srandard Partners Co., Ltd)", 
+                    brn: "등록번호 : 840-88-02840", 
+                    ceo: "대표자 : 김민정", 
+                    addr: "소재지 : 인천 남동구 남동서로236번길 30, 2층", 
+                    email: "email : srandardpartnerskor@gmail.com", 
+                    rights: "© (주)스탠다드파트너스(Srandard Partners Co., Ltd). All rights reserved. Копирование запрещено." 
+                },
+                ars: { q: "Что такое согласие через ARS?", a: "Это процедура подтверждения согласия на использование кредитной информации через автоматическую систему голосового ответа (ARS).", notice: "Обязательно ответьте на звонок с номера 1522-2299. Подготовьте удостоверение личности.", summary: "Резюме", ex: "Пример",
+                    summarySteps: ["После 1-го сообщения — введите регистрационный номер удостоверения и нажмите '#'", "После 2-го сообщения — выберите оператора связи", "После 3-го сообщения — введите номер телефона и нажмите '#'", "После 4-го сообщения — нажмите '1'", "После 5-го сообщения — введите 6-значный код из СМС", "После 6-го сообщения — завершите вызов"]
+                },
+                data: { q: "Что такое согласие на MyData?", a: "Это разрешение финансовому учреждению напрямую проверять вашу административную информацию в государственных органах без подачи бумажных документов." },
+                signup: { q: "Что такое PASS?", a: "Сертификат PASS — это электронное удостоверение личности, подтверждающее вашу личность по номеру мобильного телефона.", down: "Нажмите кнопку загрузки для вашей ОС и оператора.", search: "Если не скачивается, найдите «PASS» в магазине приложений." },
+                cert: { q: "Что такое PASS?", a: "Сертификат PASS — это электронное удостоверение личности, подтверждающее вашу личность по номеру мобильного телефона." },
+                sign: { btn: "Нажмите кнопку ниже для перехода к подписи", q: "Что такое электронная подпись?", a: "Это система подписания документов через мобильный телефон без личного визита. Имеет ту же юридическую силу, что и бумажная подпись." },
+                common: { step: "Шаг", afterVoice: "После сообщения", done: "Завершено." }
+            }
+        };
+
+        const steps = {
+            ars: [
+                { ko: "신분증(한국신분증)에 있는 등록번호를 누른 후 '#'을 눌러주세요", ru: "Введите регистрационный номер из удостоверения личности и нажмите «#»", audio: "https://kdu5261.github.io/my-audio-player/personal1.MP3", pron: "АННЁНХАСИМНИ́КА, КОДЖИ́М. ХАНГУ́К КЭПИ́ТХАЛЬ ИМНИ́ДА. ТАНСА́ ТЭЧХУ́ЛЬ ЧИНХЭНГЫ́ЛЬ ВИ́ХЭ, КОДЖИ́МККЕСО́НЫН СИНЬО́НЧОХВЕ́ ТОНЫ́И МИТ КЭИ́Н СИНЬО́НЧО́НБО́ КОЮ́СИКПЬЁЛЬЧО́НБОЭ ПХИ́ЛЬСУЧО́К СУСИ́П ИЙО́НЭ TЭХА́Н ТОНЫ́РЫЛЬ ХАСЁ-Я ТВИ́МНИДА. ТОНЫ́РЫЛЬ ХАСИ́МЁН ЧУ́МИННО́МБО ЁЛЬСЭ ЧА́РИВА ШЭ́П ПОТО́НЫЛЬ НЫЛЛЁДЖУ́СИПСИО. ТОНЫ́РЫЛЬ ХАСИ́МЁН ПЁ́ЛЬПХОРЫЛЬ НЫЛЛЁДЖУ́СИПСИО.", ex: "8404146147014#" },
+                { ko: "이용중이신 휴대폰의 통신사를 선택해주세요.", ru: "Выберите вашего оператора мобильной связи.", audio: "https://kdu5261.github.io/my-audio-player/personal2.MP3", pron: "ХЮДЭПХО́Н ЧОХВЭ́ ТОНЪИ́ СО́БИСЫ ИМНИ́ДА. КОДЖИ́МЭ ХЭ́НДЫПХО́Н ИДО́НТХОНСИ́НСАГА Э́СЫКЭИТИ́МЁН И́ЛЬБОН, КЭ́ИТИ́МЁН И́БОН, ЭЛЬДЖИ́ ЮПХЫЛЛО́СЫМЁН САМБО́Н, Э́SЫКЭИТИ́ АЛЬТЫЛЬПХО́НИМЁН САБО́Н, КЭ́ИТИ́ АЛЬТЫЛЬПХО́НИМЁН ОБО́Н, ЭЛЬДЖИ́ ЮПХЫЛЛО́S АЛЬТЫЛЬПХО́НИМЁН Ю́КБОНЪЫЛЬ СОНТХЭГХА́Ё ДЖУСИПИО.", ex: "SKT: 1, KT: 2, LG: 3, SKT Altel: 4, KT Altel: 5, LG Altel: 6" },
+                { ko: "이용중이신 휴대폰의 번호를 누른 후 '#'을 눌러주세요", ru: "Введите номер мобильного телефона и нажмите «#»", audio: "https://kdu5261.github.io/my-audio-player/personal3.MP3", pron: "КОДЖИ́МЭ ХЭ́НДЫПХО́Н НО́МБОРЫЛЬ ИОСО́СО ИПНЁКХАСИ́ГО, ШЭ́П ПОТО́НЫЛЬ НЫЛЛЁДЖУ́СИПИО.", ex: "01012341234#" },
+                { ko: "'1'번을 눌러주세요.", ru: "Нажмите циф루 «1».", audio: "https://kdu5261.github.io/my-audio-player/personal4.MP3", pron: "КОДЖИ́МККЭСÓ ИПНЁКХАСИН ХЭ́НДЫПХО́Н НО́МБОН-ЫН \"номер телефона\" ТХОНСИ́НСА́НЫН \"оператор\" МАДЖЫ́МЁН И́ЛЬБОН, АНИ́МЁН И́БОНЪЫЛЬ НЫЛЛЁДЖУ́SИПИО.", ex: "Correct -> 1" },
+                { ko: "SMS문자로 이동하세요. 한국캐피탈로부터 수신된 메세지의 6자리 숫자코드를 확인하고 통화로 다시 돌아와 그 6자리 숫자코드를 눌러주세요.", ru: "Перейдите к разделу СМС. Проверьте 6-значный код в сообщении от Хангук Кэпитал, вернитесь к звонку и введите его.", audio: "https://kdu5261.github.io/my-audio-player/personal5.MP3", pron: "КОДЖИ́М-И КЫМИ́ЛЬ СУ́СИНХАСИН МЭСИДЖИЭ ПХЁSИ́ДЭН ИНЧЖЫННО́МБО ЁSОТ ЧА́РИЛЬІЛЬ ИПНЁКХАСИ́ГО, ШЭ́П ПОТО́НЫЛЬ НЫЛЛЁДЖУ́SИПИО.", img: "https://iili.io/fihpJ1V.png", ex: "412704" },
+                { ko: "통화를 종료해주세요.", ru: "Завершите вызов.", audio: "https://kdu5261.github.io/my-audio-player/personal6.MP3", pron: "КОДЖИ́МЭ КЭИ́Н SИНЬО́НЧО́НБО ЧОХВЭ́ ЧИПЧУ́Н ТОНЫ́ИГА ВА́НРЁ ТВИО́ТСЫМНИДА. КАМSА́ХАМНИДА.", ex: "Done" }
+            ],
+            data: [
+                { img: "https://iili.io/fiPIoxf.png", ko: "수신된 SMS문자의 링크를 눌러주세요", ru: "Нажмите на ссылку в полученном СМС" }, { img: "https://iili.io/fiPAziv.png", ko: "휴대폰을 선택해주세요", ru: "Выберите мобильный телефон" }, { img: "https://iili.io/fiP5QlR.png", ko: "성함을 입력해주세요", ru: "Введите ваше имя" }, { img: "https://iili.io/fiPaLKb.png", ko: "한국신분증의 등록번호를 입력해주세요", ru: "Введите рег. номер удостоверения" }, { img: "https://iili.io/fiP0xFs.png", ko: "휴대폰번호와 통신사를 입력해주세요(1)", ru: "Введите номер и оператора (1)" }, { img: "https://iili.io/fiPG0KX.png", ko: "휴대폰번호와 통신사를 입력해주세요(2)", ru: "Введите номер 전용(2)" }, { img: "https://iili.io/fiPN4PR.png", ko: "순서대로 눌러주세요", ru: "Нажимайте по порядку" }, { img: "https://iili.io/fihpJ1V.png", ko: "수신된 SMS문자를 확인해주세요", ru: "Проверьте СМС" }, { img: "https://iili.io/fiPURON.png", ko: "6자리 숫자코드를 입력해주세요", ru: "Введите 6-значный код" }, { img: "https://iili.io/fiPtuDJ.png", ko: "순서대로 진행해주세요", ru: "Продолжайте по порядку" }, { img: "https://iili.io/fiPmclV.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fiPy2CG.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fii9dAP.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fiiJ7a4.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fiidv5l.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fii30wN.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fiiFgzN.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fiifHjp.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fiiBxBS.png", ko: "잠시 기다려주세요", ru: "Ожидайте" }, { img: "https://iili.io/fiiCTnp.png", ko: "표시된 곳을 누르시면 완료됩니다", ru: "Нажмите для завершения" }
+            ],
+            signup: [
+                { img: "https://iili.io/fiip5N9.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fis9tuS.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fisHbJR.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fisnXn4.png", ko: "순서대로 진행해주세요", ru: "Продолжайте по порядку" }, { img: "https://iili.io/fisx1hG.png", ko: "한국신분증의 등록번호를 입력해주세요", ru: "Введите рег. номер удостоверения" }, { img: "https://iili.io/fiszVta.png", ko: "순서대로 진행해주세요", ru: "Продолжайте по порядку" }, { img: "https://iili.io/fisuXou.png", ko: "수신된 SMS문자를 확인해주세요", ru: "Проверьте СМС" }, { img: "https://iili.io/fis5At1.png", ko: "수신된 SMS문자의 6자리코드를 입력해주세요", ru: "Введите 6-значный код" }, { img: "https://iili.io/fissiwG.png", ko: "새로 사용할 6자리 숫자 비밀번호를 입력해 주세요", ru: "Введите новый 6-значный пароль" }, { img: "https://iili.io/fistCSS.png", ko: "이전에 입력한 6자리 숫자 비밀번호를 다시 한번 입력해 주세요", ru: "Введите пароль еще раз" }, { img: "https://iili.io/fiLRCR2.png", ko: "이용중이신 은행을 선택해주세요", ru: "Выберите ваш банк" }, { img: "https://iili.io/fiLYtst.png", ko: "순서대로 진행해주세요", ru: "Продолжайте по порядку" }, { img: "https://iili.io/fiLV8Lx.png", ko: "이용중이신 은행의 어플리케이션에 접속하세요", ru: "Откройте банковское приложение" }, { img: "https://iili.io/fiLh622.png", ko: "3자리 숫자코드를 입력해주세요", ru: "Введите 3-значный код" }
+            ],
+            cert: [
+                { img: "https://iili.io/fiZIeFj.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fiZTrJ4.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fiZAXtI.png", ko: "순서대로 진행해주세요", ru: "Продолжайте по порядку" }, { img: "https://iili.io/fiZ5f1e.png", ko: "순서대로 진행해주세요", ru: "Продол장йте по порядку" }, { img: "https://iili.io/fiZY3le.png", ko: "수신된 SMS문자를 확인해주세요", ru: "Проверьте СМС" }, { img: "https://iili.io/fiZcHF9.png", ko: "수신된 SMS문자의 6자리코드를 입력해주세요", ru: "Введите 6-значный код" }, { img: "https://iili.io/fiZlAg9.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fiLRCR2.png", ko: "이용중이신 은행을 선택해주세요", ru: "Выберите ваш банк" }, { img: "https://iili.io/fiZGDZb.png", ko: "순서대로 진행해주세요", ru: "Продолжайте по порядку" }, { img: "https://iili.io/fiZXpb1.png", ko: "이용중이신 은행의 어플리케이션에 접속하세요", ru: "Откройте банковское приложение" }, { img: "https://iili.io/fiZjfEb.png", ko: "3자리 숫자코드를 입력해주세요", ru: "Введите 3-значный код" }, { img: "https://iili.io/fiZNTqg.png", ko: "PASS가입시 설정한 6자리 숫자 비밀번호를 입력해주세요", ru: "Введите 6-значный пароль PASS" }, { img: "https://iili.io/fiZO4Pn.png", ko: "PASS인증서에 사용할 새로운 비밀번호를 입력해주세요", ru: "Введите новый пароль сертификата" }, { img: "https://iili.io/fiZkkQI.png", ko: "한번더 입력해주세요", ru: "Введите еще раз" }, { img: "https://iili.io/fiZvwFe.png", ko: "완료되었습니다.", ru: "Завершено" }
+            ],
+            sign: [
+                { img: "https://iili.io/fsnKj3v.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsnf9Fj.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsnfOKb.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsnq20G.png", ko: "이용중인 휴대폰 통신사를 선택해주세요", ru: "Выберите вашего оператора связи" }, { img: "https://iili.io/fsnBOyQ.png", ko: "휴대폰 번호를 입력해주세요", ru: "Введите номер телефона" }, { img: "https://iili.io/fsnCOfn.png", ko: "한국신분증의 등록번호를 입력해주세요", ru: "Введите рег. номер удостоверения" }, { img: "https://iili.io/fsnnqeR.png", ko: "성함을 입력해주세요", ru: "Введите ваше имя" }, { img: "https://iili.io/fsnn4kv.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsnxoKX.png", ko: "수신된 SMS문자를 확인해주세요", ru: "Проверьте полученное СМС" }, { img: "https://iili.io/fsnz3ge.png", ko: "수신된 SMS문자의 6자리코드를 입력해주세요", ru: "Введите 6-значный код" }, { img: "https://iili.io/fsnIB3X.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsnT2Hu.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsnTGJn.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsnTyzv.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsnutG2.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsnAUox.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsnRRDb.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsnRyzb.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsn5W2S.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsn72ZG.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsn7VoJ.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsnYqxa.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsnYVe9.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsnaohu.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsn1acv.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsn18D7.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsnEBWX.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsnEUep.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsnMYKu.png", ko: "순서대로 진행해주세요", ru: "Продолжайте по порядку" }, { img: "https://iili.io/fsnMLJf.png", ko: "순서대로 진행해주세요", ru: "Продолжайте по порядку" }, { img: "https://iili.io/fsnV4IV.png", ko: "표시된 곳을 눌러주세요(신분증 준비)", ru: "Нажмите (подготовьте удостоверение)" }, { img: "https://iili.io/fsnWh8J.png", ko: "한국신분증을 촬영해주세요", ru: "Сфотографируйте удостоверение личности" }, { img: "https://iili.io/fso8twX.png", ko: "순서대로 진행해주세요", ru: "Продолжайте по порядку" }, { img: "https://iili.io/fsnju4t.png", ko: "순서대로 진행해주세요", ru: "Продолжайте по порядку" }, { img: "https://iili.io/fsnwLJe.png", ko: "순서대로 진행해주세요", ru: "Продолжайте по порядку" }, { img: "https://iili.io/fsnOGGp.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsneGDb.png", ko: "대출기간을 선택해주세요", ru: "Выберите срок кредита" }, { img: "https://iili.io/fsnkFee.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsnk1rN.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsnvK3N.png", ko: "순서대로 진행해주세요", ru: "Продолжайте по порядку" }, { img: "https://iili.io/fsnveta.png", ko: "이용중이신 은행을 선택해주세요(1)", ru: "Выберите ваш банк (1)" }, { img: "https://iili.io/fsn8xHP.png", ko: "이용중이신 은행을 선택해주세요(2)", ru: "Выберите ваш банк (2)" }, { img: "https://iili.io/fsn8Uzu.png", ko: "이용중이신 은행을 선택해주세요(3)", ru: "Выберите ваш банк (3)" }, { img: "https://iili.io/fsn4KFf.png", ko: "이용중이신 은행 어플리케이션으로 이동해주세요", ru: "Перейдите в приложение" }, { img: "https://iili.io/fsn6Fx1.png", ko: "입금내역을 확인해주세요", ru: "Проверьте входящие переводы" }, { img: "https://iili.io/fsnPBh7.png", ko: "6자리 숫자코드를 입력해주세요", ru: "Введите 6-значный код" }, { img: "https://iili.io/fsniGV9.png", ko: "이메일 주소를 입력해주세요", ru: "Введите адрес эл. почты" }, { img: "https://iili.io/fsns8ml.png", ko: "집 주소를 입력해서 주소 검색을 해주세요", ru: "Введите адрес для поиска" }, { img: "https://iili.io/fsnQdnS.png", ko: "집 주소를 선택해주세요", ru: "Выберите адрес дома" }, { img: "https://iili.io/fsnpMil.png", ko: "나머지 주소를 입력해주세요", ru: "Введите остальную часть адреса" }, { img: "https://iili.io/fsnyWhJ.png", ko: "집 주소를 선택해주세요", ru: "Выберите адрес дома" }, { img: "https://iili.io/fso9X99.png", ko: "순서대로 진행해주세요", ru: "Продолжайте по порядку" }, { img: "https://iili.io/fsoHaHP.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsodScl.png", ko: "페이지 하단으로 이동해주세요", ru: "Прокрутите в самый низ страницы" }, { img: "https://iili.io/fso32m7.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsoF7uS.png", ko: "PASS인증서를 선택해주세요", ru: "Выберите сертификат PASS" }, { img: "https://iili.io/fsoKGWX.png", ko: "PASS어플리케이션으로 이동해 표시된 곳을 눌러주세요", ru: "В приложении PASS нажмите" }, { img: "https://iili.io/fsof1Yx.png", ko: "순서대로 진행해주세요", ru: "Продолжайте по порядку" }, { img: "https://iili.io/fsoq4AQ.png", ko: "PASS인증서 6자리 숫자 비밀번호를 입력해주세요", ru: "Введите 6-значный пароль PASS" }, { img: "https://iili.io/fsoBMs1.png", ko: "표시된 곳을 눌러주세요", ru: "Нажмите в указанном месте" }, { img: "https://iili.io/fsoCdkx.png", ko: "전자서명으로 다시 이동해서 표시된 곳을 눌러주세요", ru: "Вернитесь к подписи" }, { img: "https://iili.io/fsonjNR.png", ko: "표시된 곳을 누르시면 전자서명 절차가 완료됩니다", ru: "Нажмите для завершения" }
+            ]
+        };
+
+        function switchLang(lang) {
+            currentLang = lang;
+            const koBtn = document.getElementById('lang-ko');
+            const ruBtn = document.getElementById('lang-ru');
+            if (lang === 'ko') {
+                koBtn.classList.add('bg-white', 'shadow-sm', 'text-[#0050FF]');
+                koBtn.classList.remove('text-[#6B7684]');
+                ruBtn.classList.remove('bg-white', 'shadow-sm', 'text-[#0050FF]');
+                ruBtn.classList.add('text-[#6B7684]');
+            } else {
+                ruBtn.classList.add('bg-white', 'shadow-sm', 'text-[#0050FF]');
+                ruBtn.classList.remove('text-[#6B7684]');
+                koBtn.classList.remove('bg-white', 'shadow-sm', 'text-[#0050FF]');
+                koBtn.classList.add('text-[#6B7684]');
+            }
+            render();
+        }
+
+        function changeTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            const activeNav = document.getElementById(`nav-${tab}`);
+            if (activeNav) activeNav.classList.add('active');
+            render();
+            window.scrollTo(0, 0);
+        }
+
+        function render() {
+            const container = document.getElementById('app-content');
+            const t = i18n[currentLang];
+            const c = t.common;
+            const navLabels = document.querySelectorAll('.nav-text');
+            if (t.nav && navLabels.length > 0) {
+                t.nav.forEach((label, idx) => { if (navLabels[idx]) navLabels[idx].innerText = label; });
+            }
+
+            let html = `<div class="animate-fade">`;
+
+            if (currentTab === 'home') {
+                html += `
+                    <div class="rounded-[30px] overflow-hidden mb-8 shadow-sm">
+                        <!-- 수정된 메인 이미지 링크 -->
+                        <img src="https://iili.io/qBTDpQ1.png" class="w-full">
+                    </div>
+                    <div class="space-y-4">
+                        ${(t.home.items || []).map((item, i) => {
+                            const tabs = ['ars', 'data', 'signup', 'cert', 'sign'];
+                            return `<button onclick="changeTab('${tabs[i]}')" class="w-full bg-white p-5 rounded-[24px] text-left flex justify-between items-center shadow-sm border border-gray-100 hover:bg-gray-50 transition-all"><span class="font-bold text-[16px] text-[#333D4B]">${item}</span><i data-lucide="chevron-right" class="w-5 h-5 text-[#ADB5BD]"></i></button>`;
+                        }).join('')}
+                    </div>
+                    <p class="mt-12 text-center text-[12px] text-[#8B95A1] font-medium leading-relaxed whitespace-pre-line">${t.footer.rights}</p>
+                `;
+            } else {
+                const pageInfo = t[currentTab] || {};
+                const currentSteps = steps[currentTab] || [];
+
+                if (currentTab === 'ars') {
+                    html += `
+                        <div class="bg-white rounded-[24px] p-6 mb-8 border border-gray-100 shadow-sm">
+                            <h2 class="text-[19px] font-bold mb-3">${pageInfo.q || ''}</h2>
+                            <p class="text-[#4E5968] text-[15px] leading-relaxed mb-6">${pageInfo.a || ''}</p>
+                            <div class="bg-[#F2F7FF] text-[#0050FF] p-4 rounded-[18px] text-center font-bold text-[14px]">${pageInfo.notice || ''}</div>
+                        </div>
+                        ${currentSteps.map((s, i) => {
+                            let currentPron = s.pron;
+                            if (i === 5 && currentLang === 'ru') {
+                                currentPron = "КОДЖИ́МЭ КЭИ́Н SИНЬО́НЧО́НБО ЧОХВЭ́ ЧИПЧУ́Н ТОНЫ́ИГА ВА́НРЁ ТВИО́ТСЫМНИДА. КАМSА́ХАМНИДА.";
+                            }
+                            return `
+                                <div class="bg-white rounded-[24px] p-6 mb-8 border border-gray-100 shadow-sm">
+                                    <span class="step-label mb-4 inline-block">${c.step} ${i+1}</span>
+                                    <p class="text-[16px] font-bold text-[#191F28] mb-4">${currentLang === 'ko' ? c.afterVoice + ' ' : ''}${currentLang === 'ko' ? s.ko : s.ru}</p>
+                                    ${s.img ? `<img src="${s.img}" class="w-full mb-4 border border-gray-50 shadow-sm">` : ''}
+                                    <audio controls src="${s.audio}" class="w-full h-10 mb-4 audio-player"></audio>
+                                    ${currentLang === 'ru' ? `<div class="bg-[#F2F4F6] p-4 rounded-[18px] mb-4"><p class="text-[10px] text-[#8B95A1] font-black uppercase tracking-widest mb-1">발음</p><p class="text-[12px] text-[#4E5968] font-black leading-relaxed uppercase">${currentPron}</p></div>` : ''}
+                                    <p class="text-[14px] text-[#0050FF] font-bold">${pageInfo.ex || '예'}: <span class="text-[#4E5968] font-medium">${s.ex}</span></p>
+                                </div>
+                            `;
+                        }).join('')}
+                        <div class="bg-white rounded-[24px] p-6 border border-gray-100 mb-8 shadow-sm">
+                            <h3 class="text-[17px] font-bold mb-4"># ${pageInfo.summary || ''}</h3>
+                            <ul class="space-y-3">
+                                ${(pageInfo.summarySteps || []).map((ss, i) => `
+                                    <li class="flex items-start space-x-3 text-[14px] text-[#4E5968] font-medium">
+                                        <span class="text-[#0050FF] font-black">${i+1}.</span>
+                                        <span>${ss}</span>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    `;
+                } else {
+                    if (currentTab === 'signup') {
+                        html += `
+                            <div class="bg-white rounded-[24px] p-6 mb-8 border border-gray-100 shadow-sm">
+                                <p class="font-bold text-[15px] mb-6">${pageInfo.down || ''}</p>
+                                <div class="space-y-6">
+                                    <div><p class="text-[10px] font-black text-[#ADB5BD] uppercase mb-3 tracking-widest">Samsung / Android</p><div class="grid grid-cols-3 gap-2">
+                                    <a href="https://play.google.com/store/apps/details?id=com.sktelecom.tauth" target="_blank" class="bg-[#191F28] text-white py-3 rounded-xl text-center text-[11px] font-bold">SKT</a>
+                                    <a href="https://play.google.com/store/apps/details?id=com.kt.ktauth" target="_blank" class="bg-[#191F28] text-white py-3 rounded-xl text-center text-[11px] font-bold">KT</a>
+                                    <a href="https://play.google.com/store/apps/details?id=com.lguplus.smartotp" target="_blank" class="bg-[#191F28] text-white py-3 rounded-xl text-center text-[11px] font-bold">LGU+</a></div></div>
+                                    <div><p class="text-[10px] font-black text-[#ADB5BD] uppercase mb-3 tracking-widest">iPhone / iOS</p><div class="grid grid-cols-3 gap-2">
+                                    <a href="https://apps.apple.com/kr/app/id1141258007" target="_blank" class="bg-[#0050FF] text-white py-3 rounded-xl text-center text-[11px] font-bold">SKT</a>
+                                    <a href="https://apps.apple.com/kr/app/id1134371550" target="_blank" class="bg-[#0050FF] text-white py-3 rounded-xl text-center text-[11px] font-bold">KT</a>
+                                    <a href="https://apps.apple.com/kr/app/id1147394645" target="_blank" class="bg-[#0050FF] text-white py-3 rounded-xl text-center text-[11px] font-bold">LGU+</a></div></div>
+                                </div><p class="text-[11px] text-[#8B95A1] mt-6 italic">${pageInfo.search || ''}</p>
+                            </div>
+                        `;
+                    } else if (currentTab === 'sign') {
+                        html += `<div class="bg-white rounded-[24px] p-6 mb-8 border border-gray-100 shadow-sm text-center"><p class="font-bold text-[15px] mb-4 text-left">${pageInfo.btn || ''}</p><a href="https://www.hankookcapital.co.kr/ib20/mnu/HankookCapitalMAN000000#none" target="_blank" class="block w-full bg-[#0050FF] text-white py-4 rounded-[20px] font-bold text-[16px] shadow-lg shadow-blue-100 active:scale-95 transition-transform">전자서명 바로가기</a></div>`;
+                    }
+
+                    html += `<div class="bg-white rounded-[24px] p-6 mb-8 border border-gray-100 shadow-sm"><h2 class="text-[19px] font-bold mb-3">${pageInfo.q || ''}</h2><p class="text-[#4E5968] text-[15px] leading-relaxed">${pageInfo.a || ''}</p></div>`;
+
+                    html += currentSteps.map((s, i) => `
+                        <div class="bg-white rounded-[24px] p-6 mb-8 border border-gray-100 shadow-sm">
+                            <span class="step-label mb-4 inline-block">${c.step} ${i+1}</span>
+                            <p class="text-[16px] font-bold text-[#191F28] mb-4 whitespace-pre-line">${currentLang === 'ko' ? s.ko : s.ru}</p>
+                            <img src="${s.img}" class="w-full border border-gray-50 shadow-sm">
+                        </div>
+                    `).join('');
+                }
+                html += `<p class="text-center font-black text-[#0050FF] text-lg py-12">${c.done}</p>`;
+            }
+
+            html += `
+                <footer class="mt-20 pt-10 border-t border-gray-100 text-[11px] text-[#ADB5BD] leading-6 pb-12">
+                    <p class="font-black text-[#8B95A1] mb-2">${t.footer.company}</p>
+                    <p>${t.footer.brn}</p>
+                    <p>${t.footer.ceo}</p>
+                    <p>${t.footer.addr}</p>
+                    <p>${t.footer.email}</p>
+                    <p class="mt-8 opacity-60 whitespace-pre-line text-center">${t.footer.rights}</p>
+                </footer>
+            </div>`;
+
+            container.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        window.onload = () => { switchLang('ru'); lucide.createIcons(); };
+    </script>
+</body>
+</html>
